@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Moments</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --dark-bg: #121212;
+            --dark-card: #1E1E1E;
+            --text-light: #E0E0E0;
+            --text-muted: #9E9E9E;
+            --border-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Left Section (Photo) */
+        .left-section {
+            width: 50%;
+background: url('man-in-white-and-light-tan-outfit.jpg') center/cover no-repeat;            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .left-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Right Section (Login Form) */
+        .right-section {
+            width: 50%;
+            padding: 5% 8%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--dark-card);
+            opacity: 0;
+            transform: translateX(20px);
+            animation: slideIn 0.8s ease-out 0.3s forwards;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), #FF6B6B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, var(--primary), #8A2BE2);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: var(--border-dark);
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-btn {
+            padding: 12px 24px;
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+        }
+
+        .social-btn img {
+            width: 18px;
+            margin-right: 8px;
+        }
+
+        .signup-link {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .left-section, .right-section {
+                width: 100%;
+            }
+            .left-section {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Photo Section (Left) -->
+    <div class="left-section"></div>
+
+    <!-- Login Form (Right) -->
+    <div class="right-section">
+        <h1>Welcome Back</h1>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="name">Enter Brand Name</label>
+                <input type="text" id="name" placeholder="Enter Brand Name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button>
+            
+          
+   <script>
+    const nameInput = document.getElementById('name');
+    const passwordInput = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('remember');
+
+    // إظهار الباسورد عند تفعيل remember me
+    rememberCheckbox.addEventListener('change', () => {
+        passwordInput.type = rememberCheckbox.checked ? 'text' : 'password';
+    });
+
+    // عند الضغط على login
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const username = nameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (username === 'starboy' && password === '1234') {
+            // التوجيه للداشبورد
+            window.location.href = 'dashboard.html';
+        } else {
+            alert('اسم البراند أو الباسورد غير صحيح');
+        }
+    });
+</script>
+    
+
+
+</body>
+</html>

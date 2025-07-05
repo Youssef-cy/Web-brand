@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --bg: #121212;
+      --card: #1E1E1E;
+      --text: #E0E0E0;
+      --accent: #FF6B6B;
+    }
+
+    body.light-mode {
+      --bg: #f0f0f0;
+      --card: #ffffff;
+      --text: #1e1e1e;
+      --accent: #6C63FF;
+      --primary: #6C63FF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--card);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+
+    .sidebar .logo {
+      font-size: 1.6rem;
+      color: var(--primary);
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li a {
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: var(--primary);
+    }
+
+    .sidebar ul li a.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .toggle-wrapper {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 70px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px; width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(36px);
+    }
+
+    .switch-label {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .container {
+      flex: 1;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      color: transparent;
+      font-size: 2.5rem;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 250px;
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .card p {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    canvas {
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .main-layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-layout">
+    <aside class="sidebar">
+      <h2 class="logo">UR VIBES</h2>
+      <ul>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="inbox.html"><i class="fas fa-inbox"></i> Inbox</a></li>
+        <li><a href="prodact.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+        <li><a href="support.html"><i class="fas fa-headset"></i> Support</a></li>
+      </ul>
+      <div class="toggle-wrapper">
+        <label class="switch">
+          <input type="checkbox" id="modeToggle">
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label">Dark Mode</span>
+      </div>
+    </aside>
+
+    <div class="container">
+      <h1>Welcome, Starboy</h1>
+      <div class="cards">
+        <div class="card">
+          <h2>Total Money</h2>
+          <p id="moneyValue"></p>
+        </div>
+        <div class="card">
+          <h2>Total Stock</h2>
+          <p id="stockValue"></p>
+        </div>
+        <div class="card">
+          <h2>Total Orders</h2>
+          <p id="ordersValue"></p>
+        </div>
+      </div>
+      <canvas id="myChart" height="100"></canvas>
+    </div>
+  </div>
+  <script>
+    let totalMoney = 12450;
+    let totalStock = 385;
+    let totalOrders = 128;
+    document.getElementById('moneyValue').textContent = `$${totalMoney.toLocaleString()}`;
+    document.getElementById('stockValue').textContent = `${totalStock} items`;
+    document.getElementById('ordersValue').textContent = `${totalOrders} orders`;
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Money', 'Stock', 'Orders'],
+        datasets: [{
+          label: 'Dashboard Overview',
+          data: [totalMoney, totalStock, totalOrders],
+          backgroundColor: ['#6C63FF', '#4CAF50', '#FF6B6B'],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: getComputedStyle(document.body).getPropertyValue('--text') }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text') },
+            grid: { color: '#333' }
+          },
+          y: {
+            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text') },
+            grid: { color: '#333' }
+          }
+        }
+      }
+    });
+
+    const modeToggle = document.getElementById('modeToggle');
+    const body = document.body;
+    const savedMode = localStorage.getItem('mode');
+    if (savedMode === 'light') {
+      body.classList.add('light-mode');
+      modeToggle.checked = false;
+    } else {
+      modeToggle.checked = true;
+    }
+
+    modeToggle.addEventListener('change', () => {
+      const isDark = modeToggle.checked;
+      body.classList.toggle('light-mode', !isDark);
+      localStorage.setItem('mode', isDark ? 'dark' : 'light');
+    });
+
+    // Highlight active link
+    const currentPage = window.location.pathname.split("/").pop();
+    const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+    sidebarLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
