@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inbox - Orders</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     :root {
       --primary: #6C63FF;
@@ -21,318 +21,203 @@
       --text: #E0E0E0;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: 0.3s;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    header {
-      background-color: var(--card);
-      padding: 20px 30px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    header h1 {
+    .sidebar {
+      width: 220px;
+      background-color: var(--card);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      min-height: 100vh;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+
+    .sidebar .logo {
+      font-size: 1.6rem;
+      color: var(--primary);
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li a {
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .toggle-wrapper {
+      margin-top: auto;
+      text-align: center;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .header {
       font-size: 2rem;
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       color: transparent;
+      margin-bottom: 20px;
     }
 
-    .inbox-container {
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      align-items: center;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    #add-btn-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1001;
-    }
-
-    .add-product-btn {
-      background-color: var(--primary);
-      color: white;
-      padding: 14px 32px;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .add-product-btn:hover {
-      background-color: #5848dc;
-    }
-
-    #orderList {
+    .products-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
-      justify-content: flex-start;
-      width: 100%;
     }
 
-    .order-card {
+    .product-card {
       background-color: var(--card);
       border-radius: var(--radius);
       padding: 20px;
       width: calc(25% - 20px);
       min-width: 240px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      align-items: center;
     }
 
-    .order-img {
+    .product-card img {
       width: 100%;
       height: 140px;
       object-fit: cover;
       border-radius: var(--radius);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
     }
 
-    .order-info {
-      width: 100%;
-    }
-
-    .order-info h3 {
-      margin: 0 0 10px;
+    .product-card h3 {
       color: var(--primary);
       font-size: 1.2rem;
     }
 
-    .order-info p {
+    .product-card p {
       margin: 6px 0;
       font-size: 0.95rem;
-      color: var(--text);
     }
 
-    .toggle-darkmode {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      background: var(--card);
-      padding: 12px 20px;
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text);
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: var(--card);
-      padding: 30px;
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-
-    .modal-content label {
-      font-weight: 600;
-      display: block;
-      margin-top: 12px;
-    }
-
-    .modal-content input[type="text"],
-    .modal-content input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: var(--radius);
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    .modal-content .custom-file-input {
+    .product-card button {
       margin-top: 10px;
+      padding: 8px 14px;
+      background: var(--accent);
+      border: none;
+      color: white;
+      border-radius: var(--radius);
+      cursor: pointer;
     }
 
-    .custom-file-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
+    .add-product-btn {
+      margin-bottom: 20px;
       padding: 10px 20px;
-      border-radius: var(--radius);
-      font-weight: bold;
-      cursor: pointer;
-      display: inline-block;
-    }
-
-    .modal-content input[type="file"] {
-      display: none;
-    }
-
-    .modal-content button {
-      margin-top: 20px;
-      padding: 12px;
-      width: 100%;
-      border: none;
       background: var(--primary);
+      border: none;
       color: white;
       font-weight: bold;
-      font-size: 1rem;
       border-radius: var(--radius);
       cursor: pointer;
-    }
-
-    .modal-content .sizes {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .modal-content .sizes label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.9rem;
     }
   </style>
 </head>
 <body class="dark">
-  <header>
-    <h1>prodacts</h1>
-  </header>
-
-  <div class="inbox-container">
-    <div id="orderList"></div>
-  </div>
-
-  <div id="add-btn-wrapper">
-    <button class="add-product-btn" onclick="openModal()">+ Add Product</button>
-  </div>
-
-  <div class="modal" id="productModal">
-    <div class="modal-content">
-      <label>Product Name</label>
-      <input type="text" id="productName">
-      <label>Details</label>
-      <input type="text" id="productDetails">
-      <label>Price</label>
-      <input type="number" id="productPrice">
-      <label>Image Upload</label>
-      <label class="custom-file-input">
-        <input type="file" id="productImageFile" accept="image/*">
-        <span class="custom-file-btn">Choose Image</span>
+  <div class="sidebar">
+    <div class="logo">UR VIBES</div>
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="orders.html"><i class="fas fa-inbox"></i> Orders</a></li>
+      <li><a href="prodact.html" class="active"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+      <li><a href="support.html"><i class="fas fa-headset"></i> Support</a></li>
+    </ul>
+    <div class="toggle-wrapper">
+      <label>
+        <input type="checkbox" id="darkToggle" checked> Dark Mode
       </label>
-      <label>Sizes</label>
-      <div class="sizes">
-        <label><input type="checkbox" id="sizeXS"> XS</label>
-        <label><input type="checkbox" id="sizeS"> S</label>
-        <label><input type="checkbox" id="sizeM"> M</label>
-        <label><input type="checkbox" id="sizeL"> L</label>
-        <label><input type="checkbox" id="sizeXL"> XL</label>
-      </div>
-      <button onclick="submitProduct()">Add Product</button>
     </div>
   </div>
 
-  <div class="toggle-darkmode">
-    <label for="darkToggle">Dark Mode</label>
-    <input type="checkbox" id="darkToggle" checked>
+  <div class="main-content">
+    <h1 class="header">Products</h1>
+    <button class="add-product-btn" onclick="addSampleProduct()">+ Add Product</button>
+    <div class="products-grid" id="productList"></div>
   </div>
 
   <script>
-    let orders = [];
+    const productList = document.getElementById('productList');
+    const darkToggle = document.getElementById('darkToggle');
 
-    function openModal() {
-      document.getElementById('productModal').style.display = 'flex';
+    let products = [];
+
+    function addSampleProduct() {
+      const newProduct = {
+        name: "Oversized T-Shirt",
+        price: "25",
+        image: "https://images.unsplash.com/photo-1602810313235-7fb59e30e10d",
+        sizes: ["M", "L", "XL"]
+      };
+      products.push(newProduct);
+      displayProducts();
     }
 
-    function closeModal() {
-      document.getElementById('productModal').style.display = 'none';
+    function deleteProduct(index) {
+      products.splice(index, 1);
+      displayProducts();
     }
 
-    function submitProduct() {
-      const name = document.getElementById('productName').value;
-      const details = document.getElementById('productDetails').value;
-      const price = document.getElementById('productPrice').value;
-      const imageFile = document.getElementById('productImageFile').files[0];
-
-      const sizes = [];
-      if(document.getElementById('sizeXS').checked) sizes.push('XS');
-      if(document.getElementById('sizeS').checked) sizes.push('S');
-      if(document.getElementById('sizeM').checked) sizes.push('M');
-      if(document.getElementById('sizeL').checked) sizes.push('L');
-      if(document.getElementById('sizeXL').checked) sizes.push('XL');
-
-      if (!name || !price || !imageFile) return alert("Please fill required fields");
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        orders.push({ name, details, price, image: e.target.result, sizes });
-        closeModal();
-        displayOrders();
-      }
-      reader.readAsDataURL(imageFile);
-    }
-
-    function displayOrders() {
-      const orderList = document.getElementById('orderList');
-      orderList.innerHTML = '';
-      orders.forEach((order) => {
-        orderList.innerHTML += `
-          <div class="order-card">
-            <img src="${order.image}" class="order-img">
-            <div class="order-info">
-              <h3>${order.name}</h3>
-              <p>Details: ${order.details}</p>
-              <p>Price: $${order.price}</p>
-              <p>Sizes: ${order.sizes.join(', ')}</p>
-            </div>
+    function displayProducts() {
+      productList.innerHTML = '';
+      products.forEach((product, index) => {
+        productList.innerHTML += `
+          <div class="product-card">
+            <img src="${product.image}" alt="${product.name}" />
+            <h3>${product.name}</h3>
+            <p>Price: $${product.price}</p>
+            <p>Sizes: ${product.sizes.join(', ')}</p>
+            <button onclick="deleteProduct(${index})">Delete</button>
           </div>
         `;
       });
     }
 
-    document.getElementById('darkToggle').addEventListener('change', function () {
+    darkToggle.addEventListener('change', function () {
       document.body.classList.toggle('dark', this.checked);
+      localStorage.setItem('mode', this.checked ? 'dark' : 'light');
     });
 
-    window.onclick = function(event) {
-      const modal = document.getElementById('productModal');
-      if (event.target === modal) closeModal();
-    }
+    window.onload = () => {
+      const savedMode = localStorage.getItem('mode');
+      if (savedMode === 'light') {
+        document.body.classList.remove('dark');
+        darkToggle.checked = false;
+      }
+    };
   </script>
 </body>
 </html>
